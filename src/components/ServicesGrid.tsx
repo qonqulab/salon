@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const services = [
   {
@@ -25,22 +28,61 @@ const services = [
 ];
 
 export default function ServicesGrid() {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Reveal Heading
+      gsap.fromTo(".reveal-header", 
+        { y: 40, opacity: 0 },
+        { 
+          y: 0, 
+          opacity: 1, 
+          duration: 1.2, 
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".reveal-header",
+            start: "top 90%",
+          }
+        }
+      );
+
+      // Staggered Cards
+      gsap.fromTo(".reveal-card", 
+        { y: 60, opacity: 0 },
+        { 
+          y: 0, 
+          opacity: 1, 
+          duration: 1, 
+          stagger: 0.2,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".reveal-card-container",
+            start: "top 80%",
+          }
+        }
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="services" className="py-40 bg-background text-foreground">
+    <section ref={containerRef} id="services" className="py-40 bg-background text-foreground overflow-hidden">
       <div className="container-ed">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-10">
+        <div className="reveal-header flex flex-col md:flex-row justify-between items-start md:items-end mb-16 md:mb-24 gap-8 md:gap-10">
           <div className="max-w-2xl">
-            <span className="serif text-accent tracking-[0.8em] text-[10px] md:text-xs uppercase mb-8 block">Our Expertise</span>
-            <h2 className="serif text-5xl md:text-8xl leading-[0.9]">Curated <br /> <span className="italic">Specialties</span></h2>
+            <span className="serif text-accent tracking-[0.8em] text-[10px] md:text-xs uppercase mb-6 md:mb-8 block">Our Expertise</span>
+            <h2 className="serif text-4xl md:text-8xl leading-[0.9]">Curated <br /> <span className="italic">Specialties</span></h2>
           </div>
-          <p className="max-w-xs text-[10px] uppercase tracking-[0.3em] opacity-40 leading-loose">
+          <p className="max-w-xs text-[9px] md:text-[10px] uppercase tracking-[0.3em] opacity-40 leading-loose">
             A meticulous selection of services designed for the discerning individual who demands both precision and soul.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
+        <div className="reveal-card-container grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
           {services.map((service, idx) => (
-            <div key={idx} className="group cursor-pointer">
+            <div key={idx} className="reveal-card group cursor-pointer">
               <div className="relative aspect-[3/4] overflow-hidden mb-10 shadow-sm transition-all duration-700 group-hover:shadow-2xl">
                 <Image
                   src={service.image}

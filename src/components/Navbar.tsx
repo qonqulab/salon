@@ -32,21 +32,22 @@ export default function Navbar() {
     <>
       <nav className="fixed top-0 left-0 w-full z-[100] py-6 px-6 md:px-12 flex justify-between items-center bg-background/10 backdrop-blur-md border-b border-current/5 text-foreground transition-colors duration-500">
         {/* Left Side: Menu Trigger */}
-        <div 
+        <button 
           onClick={() => setIsOpen(true)}
           className="flex items-center gap-4 cursor-pointer group"
+          aria-label="Open Menu"
         >
           <div className="flex flex-col gap-1.5 w-7">
             <div className="h-[1.5px] w-full bg-current transition-transform duration-300 group-hover:scale-x-110 origin-left" />
             <div className="h-[1.5px] w-5 bg-current transition-transform duration-300 group-hover:w-full" />
           </div>
           <span className="text-[10px] uppercase tracking-[0.4em] font-medium hidden md:block">Menu</span>
-        </div>
+        </button>
 
         {/* Center: Logo */}
         <div 
           className="absolute left-1/2 -translate-x-1/2 serif tracking-[0.4em] font-medium cursor-pointer whitespace-nowrap"
-          style={{ fontSize: 'clamp(1rem, 4vw, 1.4rem)' }}
+          style={{ fontSize: 'clamp(0.9rem, 3vw, 1.3rem)' }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           {salonName}
@@ -60,6 +61,7 @@ export default function Navbar() {
               toggleTheme();
             }}
             className="flex items-center gap-2 group"
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
           >
             <div className="relative h-4 w-4 overflow-hidden">
               <motion.div

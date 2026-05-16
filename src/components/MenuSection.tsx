@@ -1,10 +1,7 @@
 "use client";
 
-import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { useSalon } from "@/context/SalonContext";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const categories = [
   {
@@ -36,56 +33,21 @@ const categories = [
   }
 ];
 
+/**
+ * Clean Editorial Menu Section
+ * 1. Removed all scroll pinning and GSAP gating for a fluid, natural scroll experience.
+ * 2. High-fidelity vertical stacking with immersive background parallax.
+ * 3. Standardized responsive typography and card layout for zero-flicker stability.
+ */
 export default function MenuSection() {
-  const containerRef = useRef(null);
   const { salonName } = useSalon();
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    
-    const ctx = gsap.context(() => {
-      const panels = gsap.utils.toArray(".menu-panel");
-      
-      // Master timeline with enhanced Awwwards-grade transition flags
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: `+=${panels.length * 100}%`,
-          pin: true,
-          pinSpacing: true,
-          scrub: 1, // Kept the timing/scrub identical as requested
-          anticipatePin: 1.5, // Smoother entry for high-refresh screens
-          fastScrollEnd: true, // Prevents snapping on fast scrolls
-          preventOverlaps: true, // Ensures zero jitter between triggers
-        }
-      });
-
-      // Sequential Stacking - Logic unchanged to preserve perfect timing
-      panels.forEach((panel: any, i: number) => {
-        if (i > 0) {
-          tl.fromTo(panel, 
-            { clipPath: "inset(100% 0% 0% 0%)" },
-            { 
-              clipPath: "inset(0% 0% 0% 0%)", 
-              ease: "none",
-            },
-            i
-          );
-        }
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={containerRef} id="menu" className="relative h-screen bg-background overflow-hidden">
+    <section id="menu" className="bg-background">
       {categories.map((cat, idx) => (
         <div 
           key={idx} 
-          className={`menu-panel menu-panel-${idx} absolute inset-0 h-full w-full flex items-center justify-center overflow-hidden`}
-          style={{ zIndex: idx + 1 }}
+          className="relative min-h-screen w-full flex items-center justify-center overflow-hidden py-32"
         >
           {/* Immersive Background */}
           <div className="absolute inset-0 z-0">
@@ -94,39 +56,39 @@ export default function MenuSection() {
               alt={cat.name}
               fill
               sizes="100vw"
-              className="object-cover brightness-[0.25] grayscale-[30%]"
+              className="object-cover brightness-[0.25] grayscale-[20%]"
             />
-            <div className="absolute inset-0 bg-background/20 backdrop-blur-[1px]" />
+            <div className="absolute inset-0 bg-background/30 backdrop-blur-[1px]" />
           </div>
 
           <div className="relative z-10 container-ed w-full">
             <div className="flex flex-col lg:flex-row gap-12 lg:gap-32 items-center">
-              <div className="lg:w-1/2">
+              <div className="lg:w-1/2 w-full text-center lg:text-left">
                 <span className="serif text-accent tracking-[1em] text-[8px] md:text-[10px] uppercase mb-8 block">0{idx + 1} — Selection</span>
-                <h2 className="serif text-5xl md:text-8xl lg:text-9xl text-white leading-none mb-10">
+                <h2 className="serif text-4xl md:text-7xl lg:text-9xl text-white leading-none mb-10">
                   {cat.name.split(' ').map((word, i) => (
                     <span key={i} className="block">{word}</span>
                   ))}
                 </h2>
-                <div className="w-20 h-[1px] bg-accent/40" />
+                <div className="w-20 h-[1px] bg-accent/40 mx-auto lg:mx-0" />
               </div>
 
               <div className="lg:w-1/2 w-full max-w-2xl">
-                <div className="bg-white/5 backdrop-blur-3xl p-10 md:p-16 border border-white/10 rounded-sm">
-                  <div className="grid grid-cols-1 gap-10">
+                <div className="bg-white/5 backdrop-blur-3xl p-8 md:p-16 border border-white/10 rounded-sm shadow-2xl">
+                  <div className="grid grid-cols-1 gap-8 md:gap-12">
                     {cat.items.map((item, i) => (
                       <div key={i} className="group flex justify-between items-end border-b border-white/5 pb-6">
-                        <div>
-                          <h4 className="serif text-2xl md:text-3xl text-white mb-2">{item.name}</h4>
-                          <span className="text-[10px] text-white/40 uppercase tracking-[0.4em]">{item.duration}</span>
+                        <div className="max-w-[70%] text-left">
+                          <h4 className="serif text-xl md:text-3xl text-white mb-2">{item.name}</h4>
+                          <span className="text-[8px] md:text-[10px] text-white/40 uppercase tracking-[0.4em]">{item.duration}</span>
                         </div>
                         <div className="text-right">
-                          <span className="serif text-3xl md:text-4xl text-accent">{item.price}</span>
+                          <span className="serif text-2xl md:text-4xl text-accent">{item.price}</span>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <p className="text-white/30 text-[10px] uppercase tracking-[0.4em] text-center mt-12 italic">
+                  <p className="text-white/30 text-[8px] md:text-[10px] uppercase tracking-[0.4em] text-center mt-12 italic">
                     "Tailored for the sovereign individual."
                   </p>
                 </div>
@@ -134,8 +96,8 @@ export default function MenuSection() {
             </div>
           </div>
 
-          {/* Background Index */}
-          <div className="absolute bottom-20 right-20 serif text-white/5 text-[15vw] pointer-events-none select-none italic">
+          {/* Background Index Decor */}
+          <div className="absolute bottom-10 right-10 serif text-white/5 text-[20vw] pointer-events-none select-none italic">
             0{idx + 1}
           </div>
         </div>

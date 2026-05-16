@@ -1,13 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "./Button";
 import { useSalon } from "@/context/SalonContext";
 
+/**
+ * Audit Remediation:
+ * 1. Implemented explicit ID-Label associations for high-fidelity accessibility (WCAG).
+ * 2. Added cleanup logic for the submission timeout to prevent memory leaks.
+ * 3. Standardized input transitions for a smoother tactile feel.
+ */
 export default function BookingSection() {
   const { salonName } = useSalon();
-  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,14 +22,20 @@ export default function BookingSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (isSubmitting) {
+      timeout = setTimeout(() => {
+        setIsSubmitting(false);
+        setIsSuccess(true);
+      }, 2000);
+    }
+    return () => clearTimeout(timeout);
+  }, [isSubmitting]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
-    }, 2000);
   };
 
   return (
@@ -47,8 +58,9 @@ export default function BookingSection() {
                 className="flex flex-col gap-8"
               >
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] uppercase tracking-widest opacity-40">Full Name</label>
+                  <label htmlFor="booking-name" className="text-[10px] uppercase tracking-widest opacity-40">Full Name</label>
                   <input 
+                    id="booking-name"
                     required
                     type="text" 
                     placeholder="Enter your name"
@@ -59,8 +71,9 @@ export default function BookingSection() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] uppercase tracking-widest opacity-40">Email Address</label>
+                  <label htmlFor="booking-email" className="text-[10px] uppercase tracking-widest opacity-40">Email Address</label>
                   <input 
+                    id="booking-email"
                     required
                     type="email" 
                     placeholder="Enter your email"
@@ -72,8 +85,9 @@ export default function BookingSection() {
 
                 <div className="grid grid-cols-2 gap-8">
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] uppercase tracking-widest opacity-40">Service</label>
+                    <label htmlFor="booking-service" className="text-[10px] uppercase tracking-widest opacity-40">Service</label>
                     <select 
+                      id="booking-service"
                       className="border-b border-current/10 py-2 focus:border-accent outline-none bg-transparent"
                       value={formData.service}
                       onChange={(e) => setFormData({...formData, service: e.target.value})}
@@ -84,8 +98,9 @@ export default function BookingSection() {
                     </select>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] uppercase tracking-widest opacity-40">Preferred Date</label>
+                    <label htmlFor="booking-date" className="text-[10px] uppercase tracking-widest opacity-40">Preferred Date</label>
                     <input 
+                      id="booking-date"
                       required
                       type="date" 
                       className="bg-transparent border-b border-current/10 py-2 focus:border-accent outline-none"

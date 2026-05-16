@@ -33,9 +33,7 @@ export default function Home() {
         
         <ServicesGrid />
 
-        <section id="menu">
-          <MenuSection />
-        </section>
+        <MenuSection />
 
         <section id="team">
           <TeamSection />

@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useSalon } from "@/context/SalonContext";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const team = [
   {
@@ -20,23 +23,48 @@ const team = [
 
 export default function TeamSection() {
   const { salonName } = useSalon();
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const items = gsap.utils.toArray(".reveal-row");
+      
+      items.forEach((item: any) => {
+        gsap.fromTo(item, 
+          { y: 60, opacity: 0 },
+          { 
+            y: 0, 
+            opacity: 1, 
+            duration: 1.5, 
+            ease: "power4.out",
+            scrollTrigger: {
+              trigger: item,
+              start: "top 85%",
+            }
+          }
+        );
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section id="team" className="py-40 bg-background text-foreground">
+    <section ref={containerRef} id="team" className="py-40 bg-background text-foreground overflow-hidden">
       <div className="container-ed">
-        <div className="flex flex-col lg:flex-row justify-between items-start mb-32 gap-10">
-          <div className="max-w-2xl">
-            <span className="serif text-accent tracking-[0.8em] text-[10px] md:text-xs uppercase mb-8 block">The Artisans</span>
-            <h2 className="serif text-5xl md:text-8xl leading-tight">Mastering the <br /> <span className="italic">Human</span> Canvas</h2>
+        <div className="flex flex-col lg:flex-row justify-between items-start mb-20 md:mb-32 gap-8 md:gap-10">
+          <div className="max-w-2xl reveal-row">
+            <span className="serif text-accent tracking-[0.8em] text-[10px] md:text-xs uppercase mb-6 md:mb-8 block">The Artisans</span>
+            <h2 className="serif text-4xl md:text-7xl lg:text-8xl leading-tight">Mastering the <br /> <span className="italic">Human</span> Canvas</h2>
           </div>
-          <div className="max-w-xs text-[10px] uppercase tracking-[0.3em] opacity-40 leading-loose lg:pt-20">
+          <div className="max-w-xs text-[9px] md:text-[10px] uppercase tracking-[0.3em] opacity-40 leading-loose lg:pt-20 reveal-row">
             Our team of world-class artisans brings a forensic level of detail to every session, ensuring your biological signature is respected and enhanced.
           </div>
         </div>
 
-        <div className="flex flex-col gap-32">
+        <div className="flex flex-col gap-24 md:gap-32">
           {team.map((member, idx) => (
-            <div key={idx} className={`flex flex-col ${idx % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-16 lg:gap-32`}>
+            <div key={idx} className={`reveal-row flex flex-col ${idx % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-10 md:gap-16 lg:gap-32`}>
               {/* Contained Portrait */}
               <div className="w-full lg:w-2/5 aspect-[3/4] relative overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700">
                 <Image 
@@ -49,10 +77,10 @@ export default function TeamSection() {
               </div>
 
               {/* Artisan Details */}
-              <div className="w-full lg:w-3/5">
-                <span className="text-accent text-[8px] md:text-[10px] uppercase tracking-[0.6em] mb-6 block">{member.role}</span>
-                <h3 className="serif text-4xl md:text-6xl mb-8 leading-none">{member.name}</h3>
-                <p className="text-lg md:text-2xl max-w-xl serif tracking-wide font-light leading-relaxed opacity-70 mb-10">
+              <div className="w-full lg:w-3/5 text-center lg:text-left flex flex-col items-center lg:items-start">
+                <span className="text-accent text-[8px] md:text-[10px] uppercase tracking-[0.6em] mb-4 md:mb-6 block">{member.role}</span>
+                <h3 className="serif text-4xl md:text-6xl mb-6 md:mb-8 leading-none">{member.name}</h3>
+                <p className="text-base md:text-2xl max-w-xl serif tracking-wide font-light leading-relaxed opacity-70 mb-8 md:mb-10 px-4 md:px-0">
                   {member.bio}
                 </p>
                 <div className="w-12 h-[1px] bg-accent" />

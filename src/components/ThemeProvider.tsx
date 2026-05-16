@@ -15,6 +15,10 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
 
     applyTheme(theme);
     
+    // Final reveal - ensures zero-flicker entrance
+    document.body.classList.remove("opacity-0");
+    document.body.classList.add("opacity-100");
+    
     // Fallback for initial load from localStorage
     const saved = localStorage.getItem("salon-theme");
     if (saved) applyTheme(saved);

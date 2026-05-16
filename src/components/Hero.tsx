@@ -38,7 +38,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative h-screen w-full overflow-hidden">
+    <section ref={containerRef} className="relative h-[100svh] w-full overflow-hidden">
       <div className="absolute inset-0 z-0">
         <div className="hero-img-overlay absolute inset-0 z-10 bg-background origin-top" />
         <Image
@@ -52,14 +52,14 @@ export default function Hero() {
         <div className="absolute inset-0 bg-black/20 z-[5]" />
       </div>
 
-      <div className="relative z-20 h-full flex flex-col justify-end container-ed pb-20">
+      <div className="relative z-20 h-full flex flex-col justify-end container-ed pb-12 md:pb-20">
         <div className="max-w-4xl">
-          <h1 className="hero-title serif text-white mix-blend-difference leading-[0.9] uppercase" style={{ fontSize: 'clamp(3rem, 15vw, 10rem)' }}>
+          <h1 className="hero-title serif text-white mix-blend-difference leading-[0.85] uppercase" style={{ fontSize: 'clamp(2.5rem, 18vw, 10rem)' }}>
             <div className="overflow-hidden">
               <span className="inline-block whitespace-nowrap">{salonName}</span>
             </div>
           </h1>
-          <p className="mt-8 text-white/80 max-w-sm md:max-w-md serif tracking-widest text-[10px] md:text-sm uppercase leading-relaxed">
+          <p className="mt-6 md:mt-8 text-white/80 max-w-[280px] md:max-w-md serif tracking-widest text-[9px] md:text-sm uppercase leading-relaxed">
             Redefining the essence of aesthetic living through meticulous design and hospitality.
           </p>
         </div>

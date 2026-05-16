@@ -17,9 +17,15 @@
   }
 
   [data-theme='dark'],
-  body[data-theme='dark'] {
+  body[data-theme='dark'],
+  html[data-theme='dark'] {
     --background: #121212;
     --foreground: #F8F5F2;
+    background-color: #121212;
+  }
+
+  html[data-theme='light'] {
+    background-color: #F8F5F2;
   }
 
   body {
@@ -137,4 +143,11 @@
 
 .custom-cursor {
   mix-blend-mode: difference;
+}
+
+/* Eternal Reveal Engine */
+.reveal-up {
+  opacity: 0;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
