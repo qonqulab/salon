@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect, useMemo, useCallback } from "react";
 
 interface SalonContextType {
   salonName: string;
@@ -12,7 +12,7 @@ interface SalonContextType {
 const SalonContext = createContext<SalonContextType | undefined>(undefined);
 
 export function SalonProvider({ children }: { children: ReactNode }) {
-  const [salonName, setSalonName] = useState("Qonqu");
+  const [salonName, setSalonName] = useState("Qonqu Salon");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   // Load theme from localStorage on mount
@@ -23,17 +23,25 @@ export function SalonProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    localStorage.setItem("salon-theme", newTheme);
-    // Direct DOM manipulation for instant feedback and robustness
-    document.documentElement.setAttribute("data-theme", newTheme);
-    document.body.setAttribute("data-theme", newTheme);
-  };
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => {
+      const newTheme = prev === "dark" ? "light" : "dark";
+      localStorage.setItem("salon-theme", newTheme);
+      document.documentElement.setAttribute("data-theme", newTheme);
+      document.body.setAttribute("data-theme", newTheme);
+      return newTheme;
+    });
+  }, []);
+
+  const value = useMemo(() => ({
+    salonName,
+    setSalonName,
+    theme,
+    toggleTheme
+  }), [salonName, theme, toggleTheme]);
 
   return (
-    <SalonContext.Provider value={{ salonName, setSalonName, theme, toggleTheme }}>
+    <SalonContext.Provider value={value}>
       {children}
     </SalonContext.Provider>
   );

@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const articles = [
   {
@@ -21,10 +24,36 @@ const articles = [
 ];
 
 export default function JournalSection() {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const rows = gsap.utils.toArray(".reveal-journal-row");
+      
+      rows.forEach((row: any) => {
+        gsap.fromTo(row, 
+          { y: 60, opacity: 0 },
+          { 
+            y: 0, 
+            opacity: 1, 
+            duration: 1.5, 
+            ease: "power4.out",
+            scrollTrigger: {
+              trigger: row,
+              start: "top 85%",
+            }
+          }
+        );
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="journal" className="py-40 bg-background text-foreground border-t border-current/5">
+    <section ref={containerRef} id="journal" className="py-40 bg-background text-foreground border-t border-current/5 overflow-hidden">
       <div className="container-ed">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-32 gap-10">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-32 gap-10 reveal-journal-row">
           <div className="max-w-2xl">
             <span className="serif text-accent tracking-[0.8em] text-[10px] md:text-xs uppercase mb-8 block">The Journal</span>
             <h2 className="serif text-5xl md:text-8xl leading-[0.9]">Editorial <br /> <span className="italic">Perspectives</span></h2>
@@ -39,7 +68,7 @@ export default function JournalSection() {
 
         <div className="grid grid-cols-1 gap-32 lg:gap-48">
           {articles.map((article, idx) => (
-            <div key={idx} className="group flex flex-col lg:flex-row gap-12 lg:gap-24 items-center">
+            <div key={idx} className="reveal-journal-row group flex flex-col lg:flex-row gap-12 lg:gap-24 items-center">
               {/* Contained Journal Image */}
               <div className="w-full lg:w-1/2 aspect-[16/10] relative overflow-hidden shadow-sm">
                 <Image 

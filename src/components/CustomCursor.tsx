@@ -41,6 +41,8 @@ export default function CustomCursor() {
     const ySetFollower = gsap.quickSetter(followerRef.current, "y", "px");
 
     const onMouseMove = (e: MouseEvent) => {
+      if (!cursorRef.current || !followerRef.current) return;
+
       mouse.current.x = e.clientX;
       mouse.current.y = e.clientY;
       
@@ -62,6 +64,8 @@ export default function CustomCursor() {
 
     // Ticker for smooth follow effect (Interpolation)
     const tick = () => {
+      if (!cursorRef.current || !followerRef.current) return;
+
       const dt = 0.15; // Follow speed
       delayedMouse.current.x += (mouse.current.x - delayedMouse.current.x) * dt;
       delayedMouse.current.y += (mouse.current.y - delayedMouse.current.y) * dt;
@@ -76,6 +80,7 @@ export default function CustomCursor() {
     window.addEventListener("mousemove", onMouseMove);
 
     const onMouseLeaveWindow = () => {
+      if (!cursorRef.current || !followerRef.current) return;
       gsap.to([cursorRef.current, followerRef.current], { opacity: 0, duration: 0.3 });
     };
 

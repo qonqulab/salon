@@ -33,12 +33,12 @@ export default function ServicesGrid() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Reveal Heading
-      gsap.fromTo(".reveal-header", 
+      gsap.fromTo(".reveal-header",
         { y: 40, opacity: 0 },
-        { 
-          y: 0, 
-          opacity: 1, 
-          duration: 1.2, 
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
           ease: "power3.out",
           scrollTrigger: {
             trigger: ".reveal-header",
@@ -48,12 +48,12 @@ export default function ServicesGrid() {
       );
 
       // Staggered Cards
-      gsap.fromTo(".reveal-card", 
+      gsap.fromTo(".reveal-card",
         { y: 60, opacity: 0 },
-        { 
-          y: 0, 
-          opacity: 1, 
-          duration: 1, 
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
           stagger: 0.2,
           ease: "power2.out",
           scrollTrigger: {
@@ -95,7 +95,7 @@ export default function ServicesGrid() {
                   <ArrowUpRight size={18} />
                 </div>
               </div>
-              
+
               <div className="flex flex-col gap-4">
                 <span className="text-[8px] uppercase tracking-[0.4em] text-accent font-medium">{service.category}</span>
                 <h3 className="serif text-2xl lg:text-3xl group-hover:text-accent transition-colors">{service.title}</h3>

@@ -32,7 +32,7 @@ export default function Navbar() {
     <>
       <nav className="fixed top-0 left-0 w-full z-[100] py-6 px-6 md:px-12 flex justify-between items-center bg-background/10 backdrop-blur-md border-b border-current/5 text-foreground transition-colors duration-500">
         {/* Left Side: Menu Trigger */}
-        <button 
+        <button
           onClick={() => setIsOpen(true)}
           className="flex items-center gap-4 cursor-pointer group"
           aria-label="Open Menu"
@@ -45,17 +45,17 @@ export default function Navbar() {
         </button>
 
         {/* Center: Logo */}
-        <div 
+        <div
           className="absolute left-1/2 -translate-x-1/2 serif tracking-[0.4em] font-medium cursor-pointer whitespace-nowrap"
           style={{ fontSize: 'clamp(0.9rem, 3vw, 1.3rem)' }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           {salonName}
         </div>
-        
+
         {/* Right Side: Contact & Theme */}
         <div className="flex items-center gap-6 md:gap-10">
-          <button 
+          <button
             onClick={(e) => {
               e.stopPropagation();
               toggleTheme();
@@ -77,7 +77,7 @@ export default function Navbar() {
               {theme === "dark" ? "Dark Mode" : "Light Mode"}
             </span>
           </button>
-          
+
           <div className="flex items-center gap-3 cursor-pointer group">
             <a href="#booking" className="text-[10px] uppercase tracking-[0.4em] font-medium hidden md:block">Contact</a>
             <User size={16} strokeWidth={2} className="group-hover:scale-110 transition-transform duration-300" />
@@ -96,18 +96,19 @@ export default function Navbar() {
                 animate={{ scaleY: 1 }}
                 exit={{ scaleY: 0 }}
                 transition={{ ...transition, delay: i * 0.05 }}
-                className="h-full flex-1 bg-background origin-top"
+                className="h-full flex-1 bg-background origin-top will-change-transform"
+                style={{ backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
               />
             ))}
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               className="absolute inset-0 z-[205] flex flex-col items-center justify-center text-foreground"
             >
-              <button 
+              <button
                 onClick={() => setIsOpen(false)}
                 className="absolute top-8 right-8 md:top-10 md:right-12 p-4 border border-current/10 rounded-full hover:bg-foreground hover:text-background transition-all duration-500"
               >
@@ -127,7 +128,7 @@ export default function Navbar() {
 
                 <ul className="flex flex-col items-center md:items-end gap-1 md:gap-2">
                   {navLinks.map((link, idx) => (
-                    <motion.li 
+                    <motion.li
                       key={link.name}
                       initial={{ y: 80, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
@@ -135,16 +136,16 @@ export default function Navbar() {
                       transition={{ delay: 0.2 + idx * 0.05, duration: 0.5, ease: "easeOut" }}
                       className="relative group h-[50px] md:h-[80px] overflow-hidden"
                     >
-                      <a 
-                        href={link.href} 
+                      <a
+                        href={link.href}
                         onClick={() => setIsOpen(false)}
                         className="serif text-4xl md:text-7xl leading-none block transition-transform duration-500 group-hover:-translate-y-full"
                       >
                         {link.name}
                       </a>
                       {/* Secondary text only for desktop hover effect */}
-                      <a 
-                        href={link.href} 
+                      <a
+                        href={link.href}
                         onClick={() => setIsOpen(false)}
                         className="serif text-4xl md:text-7xl text-accent leading-none hidden md:block transition-transform duration-500 group-hover:-translate-y-full"
                       >
@@ -157,7 +158,7 @@ export default function Navbar() {
 
               <div className="absolute bottom-10 w-full px-10 flex flex-col md:flex-row justify-between items-end gap-10">
                 <div className="flex flex-col gap-4">
-                   <div className="flex gap-8 text-[8px] md:text-[10px] uppercase tracking-[0.4em] opacity-40">
+                  <div className="flex gap-8 text-[8px] md:text-[10px] uppercase tracking-[0.4em] opacity-40">
                     <span className="hover:opacity-100 cursor-pointer transition-opacity hover:text-accent">Instagram</span>
                     <span className="hover:opacity-100 cursor-pointer transition-opacity hover:text-accent">Journal</span>
                     <span className="hover:opacity-100 cursor-pointer transition-opacity hover:text-accent">Location</span>

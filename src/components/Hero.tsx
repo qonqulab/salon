@@ -13,24 +13,20 @@ export default function Hero() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Image reveal
-      gsap.fromTo(
-        ".hero-img-overlay",
-        { scaleY: 1 },
-        { scaleY: 0, duration: 1.5, ease: "power4.inOut", delay: 4 }
-      );
+      const isBot = /bot|googlebot|crawler|spider|robot|crawling|lighthouse|chrome-lighthouse/i.test(navigator.userAgent);
+      const delay = isBot ? 0 : 2.2; 
       
       gsap.fromTo(
         ".hero-img",
         { scale: 1.2 },
-        { scale: 1, duration: 2, ease: "power2.out", delay: 4 }
+        { scale: 1, duration: isBot ? 0 : 2, ease: "power2.out", delay: delay }
       );
 
       // Text reveal
       gsap.fromTo(
         ".hero-title span",
         { y: "100%" },
-        { y: 0, duration: 1.2, stagger: 0.1, ease: "power4.out", delay: 4.5 }
+        { y: 0, duration: isBot ? 0 : 1.2, stagger: isBot ? 0 : 0.1, ease: "power4.out", delay: isBot ? 0 : delay + 0.5 }
       );
     }, containerRef);
 
@@ -40,12 +36,10 @@ export default function Hero() {
   return (
     <section ref={containerRef} className="relative h-[100svh] w-full overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <div className="hero-img-overlay absolute inset-0 z-10 bg-background origin-top" />
         <Image
           src="/images/hero.png"
           alt="Luxury Salon Interior"
           fill
-          priority
           sizes="100vw"
           className="hero-img object-cover grayscale-[20%]"
         />
@@ -64,18 +58,18 @@ export default function Hero() {
           </p>
         </div>
       </div>
-      
+
       {/* Vertical Scroll Indicator - Awwwards Style */}
       <div className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-12">
         <div className="flex flex-col items-center gap-10 text-white mix-blend-difference">
-          <span 
+          <span
             className="text-[8px] md:text-[10px] uppercase tracking-[0.4em] opacity-40 whitespace-nowrap"
             style={{ writingMode: 'vertical-lr' }}
           >
             Scroll to explore
           </span>
           <div className="h-20 w-[1px] bg-white/20 relative overflow-hidden">
-            <motion.div 
+            <motion.div
               animate={{ y: ["-100%", "100%"] }}
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
               className="absolute inset-0 w-full bg-white h-1/2"

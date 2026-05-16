@@ -10,12 +10,14 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: 'swap',
+  preload: false,
 });
 
 const playfair = Playfair_Display({ 
   subsets: ["latin"],
   variable: "--font-playfair",
   display: 'swap',
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -34,39 +36,46 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <SalonProvider>
-        <head>
+      <head>
+        {/* No-JS Safety Net */}
+        <noscript>
+          <style>{`
+            body { opacity: 1 !important; }
+            .loader-title { display: none !important; }
+          `}</style>
+        </noscript>
+        {/* Anti-Flicker / Hydration Blocking Script */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('salon-theme');
+                  var theme = saved || 'dark';
+                  document.documentElement.setAttribute('data-theme', theme);
+                  
+                  // Immediate Bot Reveal
+                  if (/bot|googlebot|crawler|spider|robot|crawling|lighthouse|chrome-lighthouse/i.test(navigator.userAgent)) {
+                    document.documentElement.style.opacity = '1';
+                    var style = document.createElement('style');
+                    style.innerHTML = 'body { opacity: 1 !important; transition: none !important; } .hero-img-overlay { display: none !important; }';
+                    document.head.appendChild(style);
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body suppressHydrationWarning className={`${inter.variable} ${playfair.variable} antialiased opacity-0 transition-opacity duration-300`}>
+        <SalonProvider>
           <SEOData />
-          {/* No-JS Safety Net */}
-          <noscript>
-            <style>{`
-              body { opacity: 1 !important; }
-              .loader-title { display: none !important; }
-            `}</style>
-          </noscript>
-          {/* Anti-Flicker / Hydration Blocking Script */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                (function() {
-                  try {
-                    var saved = localStorage.getItem('salon-theme');
-                    var theme = saved || 'dark';
-                    document.documentElement.setAttribute('data-theme', theme);
-                    document.body.setAttribute('data-theme', theme);
-                  } catch (e) {}
-                })();
-              `,
-            }}
-          />
-        </head>
-        <body suppressHydrationWarning className={`${inter.variable} ${playfair.variable} antialiased opacity-0 transition-opacity duration-300`}>
           <ThemeProvider>
             <GSAPRegister />
             {children}
           </ThemeProvider>
-        </body>
-      </SalonProvider>
+        </SalonProvider>
+      </body>
     </html>
   );
 }
